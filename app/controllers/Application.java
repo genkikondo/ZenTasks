@@ -3,6 +3,7 @@ package controllers;
 import models.Project;
 import models.Task;
 import models.User;
+import play.Routes;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -38,6 +39,15 @@ public class Application extends Controller {
       session("email", loginForm.get().email);
       return redirect(routes.Application.index());
     }
+  }
+
+  public static Result javascriptRoutes() {
+    response().setContentType("text/javascript");
+    return ok(Routes.javascriptRouter("jsRoutes",
+        controllers.routes.javascript.Projects.add(),
+        controllers.routes.javascript.Projects.delete(),
+        controllers.routes.javascript.Projects.rename(),
+        controllers.routes.javascript.Projects.addGroup()));
   }
 
   public static class Login {
