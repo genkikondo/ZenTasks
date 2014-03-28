@@ -16,7 +16,8 @@ public class Project extends Model {
   public static Model.Finder<Long, Project> find = new Model.Finder<Long, Project>(
       Long.class, Project.class);
 
-  @Id public Long id;
+  @Id
+  public Long id;
   public String name;
   public String folder;
   @ManyToMany(cascade = CascadeType.REMOVE)
@@ -37,5 +38,17 @@ public class Project extends Model {
 
   public static List<Project> findInvolving(String user) {
     return find.where().eq("members.email", user).findList();
+  }
+
+  public static boolean isMember(Long project, String user) {
+    return find.where().eq("members.email", user).eq("id", project)
+        .findRowCount() > 0;
+  }
+
+  public static String rename(Long projectId, String newName) {
+    Project project = find.ref(projectId);
+    project.name = newName;
+    project.update();
+    return newName;
   }
 }
